@@ -11,7 +11,6 @@ public class DatabaseConnection {
         Connection conn = null;
 
         try {
-            System.out.println("Conectando com o banco de dados");
             conn = DriverManager.getConnection(DatabaseConfig.getUrl(), DatabaseConfig.getUsername(), DatabaseConfig.getPassword());
         } catch (SQLException e) {
             System.out.println("Erro ao conectar ao banco. " + e.getMessage());
