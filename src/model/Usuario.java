@@ -15,11 +15,8 @@ public class Usuario {
     }
 
     public Usuario (int idUsuario, String nome, String email, String senha, String cargo) {
+        this(nome, email, senha, cargo);
         this.idUsuario = idUsuario;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.cargo = cargo;
     }
 
     public int getIdUsuario() {

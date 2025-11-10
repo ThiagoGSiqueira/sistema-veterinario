@@ -9,9 +9,9 @@ import java.util.List;
 
 public class UsuarioDAO {
     //Criar usuário // ADMIN & Cliente
-    //Logar usuário // ADMIN & Cliente
-    //Listar contas //ADMIN
-
+    //Autenticar usuário // ADMIN & Cliente
+    //Listar contas //ADMIN -> Retorna apenas usuarios do tipo Cliente
+    //Remover usuario //ADMIN
     public Usuario criarUsuario(Usuario usuario) {
         String sql = "INSERT INTO usuario (nome, email, senha, cargo) VALUES (?, ?, ?, ?)";
 
@@ -45,7 +45,7 @@ public class UsuarioDAO {
         String sql = "SELECT * FROM usuario WHERE email = ? and senha = ?";
 
         try (Connection conn = DatabaseConnection.getConexao();
-        PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             Usuario usuario = null;
 
@@ -60,6 +60,7 @@ public class UsuarioDAO {
                         rs.getString(4),
                         rs.getString(5)
                 );
+                System.out.println("Autenticado!");
                 return usuario;
             }
             System.out.println("Esse usuário não existe");
@@ -74,7 +75,7 @@ public class UsuarioDAO {
         String sql = "SELECT * FROM usuario WHERE cargo = 'CLIENTE'";
 
         try (Connection conn = DatabaseConnection.getConexao();
-        PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
 
@@ -89,7 +90,22 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
 
+    public void removerUsuario(int idUsuario) {
+        String sql = "DELETE FROM usuario WHERE id_usuario = ?";
 
+        try (Connection conn = DatabaseConnection.getConexao();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            int linhasAfetadas = ps.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Usuario deletado!");
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

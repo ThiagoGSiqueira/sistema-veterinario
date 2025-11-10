@@ -42,5 +42,4 @@ public class DatabaseConfig {
         return props.getProperty("db.password");
     }
 
-
 }
