@@ -12,8 +12,10 @@ public class UsuarioDAO {
     //Autenticar usuário // ADMIN & Cliente
     //Listar contas //ADMIN -> Retorna apenas usuarios do tipo Cliente
     //Remover usuario //ADMIN
-    public Usuario criarUsuario(Usuario usuario) {
+    //Buscar usuario por id, retorna um usuario
+    public int criarUsuario(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO usuario (nome, email, senha, cargo) VALUES (?, ?, ?, ?)";
+        int linhasAfetadas = 0;
 
         try (Connection conn = DatabaseConnection.getConexao();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -22,26 +24,18 @@ public class UsuarioDAO {
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getSenha());
             ps.setString(4, usuario.getCargo());
-            int linhasAfetadas = ps.executeUpdate();
+            linhasAfetadas = ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
 
             while (rs.next()) {
                 usuario.setIdUsuario(rs.getInt(1));
             }
-
-            if (linhasAfetadas > 0) {
-                System.out.println("Usuário de ID: " + usuario.getIdUsuario() + " & Nome:" + usuario.getNome() + " foi criado com sucesso!");
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return linhasAfetadas;
         }
-
-        return usuario;
     }
 
-    public Usuario autenticar(String email, String senha) {
+    public Usuario autenticar(String email, String senha) throws SQLException {
         String sql = "SELECT * FROM usuario WHERE email = ? and senha = ?";
 
         try (Connection conn = DatabaseConnection.getConexao();
@@ -54,25 +48,23 @@ public class UsuarioDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                usuario = new Usuario(rs.getInt(1),
+                usuario = new Usuario(
+                        rs.getInt(1),
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
                         rs.getString(5)
                 );
-                System.out.println("Autenticado!");
                 return usuario;
             }
-            System.out.println("Esse usuário não existe");
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return null;
         }
-        return null;
     }
 
-    public void listarUsuarios() {
+    public List<Usuario> listarUsuarios() throws SQLException {
         String sql = "SELECT * FROM usuario WHERE cargo = 'CLIENTE'";
+        List<Usuario> usuarios = new ArrayList<>();
+
 
         try (Connection conn = DatabaseConnection.getConexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -80,32 +72,51 @@ public class UsuarioDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                System.out.println(rs.getInt("id_usuario"));
-                System.out.println(rs.getString("nome"));
-                System.out.println(rs.getString("email"));
-                System.out.println(rs.getString("senha"));
-                System.out.println(rs.getString("cargo"));
+                Usuario usuario = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo")
+                );
+                usuarios.add(usuario);
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return usuarios;
         }
     }
 
-    public void removerUsuario(int idUsuario) {
+    public int removerUsuario(int idUsuario) throws SQLException {
         String sql = "DELETE FROM usuario WHERE id_usuario = ?";
-
+        int linhasAfetadas = 0;
         try (Connection conn = DatabaseConnection.getConexao();
-        PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idUsuario);
-            int linhasAfetadas = ps.executeUpdate();
+            linhasAfetadas = ps.executeUpdate();
 
-            if (linhasAfetadas > 0) {
-                System.out.println("Usuario deletado!");
+            return linhasAfetadas;
+
+        }
+    }
+
+    public Usuario buscarUsuarioPorId(int idUsuario) throws SQLException {
+        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+        Usuario u = null;
+        try (Connection conn = DatabaseConnection.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                u = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo")
+                );
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return u;
         }
     }
 }

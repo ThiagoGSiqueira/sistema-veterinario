@@ -1,11 +1,15 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Usuario {
     private int idUsuario;
     private String nome;
     private String email;
     private String senha;
     private String cargo;
+    private List<Pet> pets = new ArrayList<>();
 
     public Usuario (String nome, String email, String senha, String cargo) {
         this.nome = nome;
@@ -57,5 +61,25 @@ public class Usuario {
 
     public void setCargo(String cargo) {
         this.cargo = cargo;
+    }
+
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "idUsuario=" + idUsuario +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", cargo='" + cargo + '\'' +
+                ", pets=" + pets +
+                '}';
     }
 }

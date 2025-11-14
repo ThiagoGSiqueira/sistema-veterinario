@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PetDAO {
@@ -19,8 +19,9 @@ public class PetDAO {
     //Listar pet por dono
     //Atualizar pet
 
-    public void criarPet(Pet pet, int idUsuario) {
+    public int criarPet(Pet pet) throws SQLException {
         String sql = "INSERT INTO pet (nome, porte, especie, data_nascimento, id_usuario) VALUES (?, ?, ?, ?, ?)";
+        int linhasAfetadas = 0;
 
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -28,35 +29,28 @@ public class PetDAO {
             ps.setString(2, pet.getPorte());
             ps.setString(3, pet.getEspecie());
             ps.setDate(4, java.sql.Date.valueOf(pet.getData_nascimento()));
-            ps.setInt(5, idUsuario);
-            int linhasAfetadas = ps.executeUpdate();
+            ps.setInt(5, pet.getIdUsuario());
+            linhasAfetadas = ps.executeUpdate();
 
-            if (linhasAfetadas > 0) {
-
-                System.out.println("Pet criado");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return linhasAfetadas;
         }
     }
 
-    public void removerPet(int idPet) {
+    public int removerPet(int idPet) throws SQLException {
         String sql = "DELETE FROM pet WHERE id_pet = ?";
-
+        int linhasAfetadas = 0;
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idPet);
-            int linhasAfetadas = ps.executeUpdate();
-
-            if  (linhasAfetadas > 0) {
-                System.out.println("Pet removido");
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            linhasAfetadas = ps.executeUpdate();
+            return linhasAfetadas;
         }
     }
 
-    public void listarPetsPorDono(int idUsuario) {
+    public List<Pet> listarPetsPorDono(int idUsuario) throws SQLException {
+
+        List<Pet> pets = new ArrayList<>();
+
         String sql = "SELECT * FROM pet WHERE id_usuario = ?";
 
         try (Connection conn = DatabaseConnection.getConexao();
@@ -66,45 +60,53 @@ public class PetDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                System.out.println(rs.getInt("id_pet"));
-                System.out.println(rs.getString("nome"));
-                System.out.println(rs.getString("id_usuario"));
+                Pet p = new Pet(
+                        rs.getInt("id_pet"),
+                        rs.getString("nome"),
+                        rs.getString("porte"),
+                        rs.getString("especie"),
+                        rs.getDate("data_nascimento").toLocalDate(),
+                        rs.getInt("id_usuario")
+                );
+                pets.add(p);
             }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return pets;
         }
     }
 
-    public void listarPets() {
+    public List<Pet> listarPets() throws SQLException {
         String sql = "SELECT * FROM pet";
-
+        List<Pet> pets = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
 
            ResultSet rs = ps.executeQuery();
 
            while (rs.next()) {
-               System.out.println(rs.getString("nome"));
+               Pet pet = new Pet(
+                       rs.getInt("id_pet"),
+                       rs.getString("nome"),
+                       rs.getString("porte"),
+                       rs.getString("especie"),
+                       rs.getDate("data_nascimento").toLocalDate(),
+                       rs.getInt("id_usuario")
+               );
            }
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            return pets;
         }
     }
 
-    public void atualizarPet(int idPet, Pet pet) {
+    public int atualizarPet(int idPet, Pet pet) throws SQLException {
         String sql = "UPDATE pet SET nome=? WHERE id_pet = ?";
+        int linhasAfetadas = 0;
 
-        try(Connection conn = DatabaseConnection.getConexao();
+        try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, pet.getNome());
             ps.setInt(2, idPet);
 
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            linhasAfetadas = ps.executeUpdate();
+            return linhasAfetadas;
         }
     }
-
 }

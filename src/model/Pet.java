@@ -70,4 +70,16 @@ public class Pet {
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
     }
+
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "idPet=" + idPet +
+                ", nome='" + nome + '\'' +
+                ", porte='" + porte + '\'' +
+                ", especie='" + especie + '\'' +
+                ", data_nascimento=" + data_nascimento +
+                ", idUsuario=" + idUsuario +
+                '}';
+    }
 }
