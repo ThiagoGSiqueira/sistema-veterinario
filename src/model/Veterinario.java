@@ -2,10 +2,10 @@ package model;
 
 public class Veterinario {
 
-    private int idVet;
     private String nome;
     private String crmv;
     private String telefone;
+    private int idUsuario;
 
     public Veterinario(String nome, String crmv, String telefone) {
         this.nome = nome;
@@ -13,13 +13,9 @@ public class Veterinario {
         this.telefone = telefone;
     }
 
-    public Veterinario(String nome, String crmv, String telefone, int idVet) {
+    public Veterinario(String nome, String crmv, String telefone, int idUsuario) {
         this(nome, crmv, telefone);
-        this.idVet = idVet;
-    }
-
-    public int getIdVet() {
-        return idVet;
+        this.idUsuario = idUsuario;
     }
 
     public String getNome() {
@@ -44,5 +40,13 @@ public class Veterinario {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }
