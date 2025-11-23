@@ -36,7 +36,7 @@ public class UsuarioDAO {
     }
 
     public Usuario autenticar(String email, String senha) throws SQLException {
-        String sql = "SELECT * FROM usuario WHERE email = ? and senha = ?";
+        String sql = "SELECT * FROM usuario WHERE email = ? and  senha = ?";
 
         try (Connection conn = DatabaseConnection.getConexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -61,8 +61,30 @@ public class UsuarioDAO {
         }
     }
 
-    public List<Usuario> listarUsuarios() throws SQLException {
-        String sql = "SELECT * FROM usuario WHERE cargo = 'CLIENTE'";
+    public Usuario buscarUsuarioPorId(int idUsuario) throws SQLException {
+        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+        Usuario u = null;
+        try (Connection conn = DatabaseConnection.getConexao();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                u = new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getString("cargo")
+                );
+            }
+            return u;
+        }
+    }
+
+    public List<Usuario> buscarUsuarios() throws SQLException {
+        String sql = "SELECT * FROM usuario WHERE cargo = 'CLIENTE' OR cargo = 'VETERINARIO'";
         List<Usuario> usuarios = new ArrayList<>();
 
 
@@ -95,28 +117,6 @@ public class UsuarioDAO {
 
             return linhasAfetadas;
 
-        }
-    }
-
-    public Usuario buscarUsuarioPorId(int idUsuario) throws SQLException {
-        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
-        Usuario u = null;
-        try (Connection conn = DatabaseConnection.getConexao();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idUsuario);
-
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                u = new Usuario(
-                        rs.getInt("id_usuario"),
-                        rs.getString("nome"),
-                        rs.getString("email"),
-                        rs.getString("senha"),
-                        rs.getString("cargo")
-                );
-            }
-            return u;
         }
     }
 }

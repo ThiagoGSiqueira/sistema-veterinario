@@ -47,7 +47,7 @@ public class PetDAO {
         }
     }
 
-    public List<Pet> listarPetsPorDono(int idUsuario) throws SQLException {
+    public List<Pet> buscarPetsPorDono(int idUsuario) throws SQLException {
 
         List<Pet> pets = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public class PetDAO {
         }
     }
 
-    public List<Pet> listarPets() throws SQLException {
+    public List<Pet> buscarPets() throws SQLException {
         String sql = "SELECT * FROM pet";
         List<Pet> pets = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConexao();

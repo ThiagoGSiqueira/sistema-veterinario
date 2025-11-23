@@ -41,7 +41,7 @@ public class ConsultaDAO {
     }
 
 
-    public List<Consulta> listaConsultasPorUsuario(int idUsuario) throws SQLException {
+    public List<Consulta> buscaConsultasPorUsuario(int idUsuario) throws SQLException {
         List<Consulta> consultas = new ArrayList<>();
         String sql = "SELECT * FROM consulta WHERE id_usuario_cliente=? OR id_usuario_veterinario=? ";
 
@@ -70,7 +70,7 @@ public class ConsultaDAO {
         }
     }
 
-    public List<Consulta> listaTodasConsultas() throws SQLException {
+    public List<Consulta> buscaTodasConsultas() throws SQLException {
         List<Consulta> consultas = new ArrayList<>();
         String sql =  "SELECT * FROM consulta";
         try (Connection conn = DatabaseConnection.getConexao();

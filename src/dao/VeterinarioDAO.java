@@ -27,7 +27,7 @@ public class VeterinarioDAO {
         }
     }
 
-    public List<Veterinario> listarVeterinarios() throws SQLException {
+    public List<Veterinario> buscarVeterinarios() throws SQLException {
         String sql = "SELECT * FROM veterinario";
         List<Veterinario> veterinarios = new ArrayList<>();
 
@@ -48,7 +48,7 @@ public class VeterinarioDAO {
         return veterinarios;
     }
 
-    public Veterinario listarVeterinarioPorId(int idUsuario) throws SQLException {
+    public Veterinario buscarVeterinarioPorId(int idUsuario) throws SQLException {
         String sql = "SELECT * FROM veterinario WHERE id_usuario = ?";
 
         try (Connection conn = DatabaseConnection.getConexao();
