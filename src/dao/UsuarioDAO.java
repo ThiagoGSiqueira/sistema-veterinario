@@ -24,14 +24,14 @@ public class UsuarioDAO {
             ps.setString(2, usuario.getEmail());
             ps.setString(3, usuario.getSenha());
             ps.setString(4, usuario.getCargo());
-            linhasAfetadas = ps.executeUpdate();
+            ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
 
             while (rs.next()) {
                 usuario.setIdUsuario(rs.getInt(1));
             }
-            return linhasAfetadas;
+            return usuario.getIdUsuario();
         }
     }
 

@@ -2,28 +2,18 @@ package model;
 
 public class Veterinario {
 
-    private String nome;
     private String crmv;
     private String telefone;
     private int idUsuario;
 
-    public Veterinario(String nome, String crmv, String telefone) {
-        this.nome = nome;
+    public Veterinario(String crmv, String telefone) {
         this.crmv = crmv;
         this.telefone = telefone;
     }
 
-    public Veterinario(String nome, String crmv, String telefone, int idUsuario) {
-        this(nome, crmv, telefone);
+    public Veterinario(String crmv, String telefone, int idUsuario) {
+        this(crmv, telefone);
         this.idUsuario = idUsuario;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getCrmv() {

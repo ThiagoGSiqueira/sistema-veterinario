@@ -14,14 +14,13 @@ public class VeterinarioDAO {
     //Remover Veterinario
 
     public int criarVeterinario(Veterinario veterinario) throws SQLException {
-        String sql = "INSERT INTO veterinario(nome, crmv, telefone, id_usuario) VALUES (?, ?,?,?)";
+        String sql = "INSERT INTO veterinario(crmv, telefone, id_usuario) VALUES (?,?,?)";
 
         try (Connection conn = DatabaseConnection.getConexao();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, veterinario.getNome());
-            ps.setString(2, veterinario.getCrmv());
-            ps.setString(3, veterinario.getTelefone());
-            ps.setInt(4, veterinario.getIdUsuario());
+            ps.setString(1, veterinario.getCrmv());
+            ps.setString(2, veterinario.getTelefone());
+            ps.setInt(3, veterinario.getIdUsuario());
 
             return ps.executeUpdate();
         }
@@ -36,7 +35,6 @@ public class VeterinarioDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Veterinario veterinario = new Veterinario(
-                        rs.getString("nome"),
                         rs.getString("crmv"),
                         rs.getString("telefone"),
                         rs.getInt("id_usuario")
@@ -58,7 +56,6 @@ public class VeterinarioDAO {
 
             while (rs.next()) {
                 Veterinario veterinario = new Veterinario(
-                        rs.getString("nome"),
                         rs.getString("crmv"),
                         rs.getString("telefone"),
                         rs.getInt("id_usuario")
@@ -70,13 +67,12 @@ public class VeterinarioDAO {
     }
 
     public int atualizarVeterinario(Veterinario vet, int idUsuario) throws SQLException {
-        String sql = "UPDATE veterinario SET nome=?, crmv=?, telefone=? WHERE idUsuario=?";
+        String sql = "UPDATE veterinario SET crmv=?, telefone=? WHERE idUsuario=?";
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, vet.getNome());
-            ps.setString(2, vet.getCrmv());
-            ps.setString(3, vet.getTelefone());
-            ps.setInt(4, idUsuario);
+            ps.setString(1, vet.getCrmv());
+            ps.setString(2, vet.getTelefone());
+            ps.setInt(3, idUsuario);
             return ps.executeUpdate();
         }
     }
