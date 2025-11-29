@@ -3,83 +3,73 @@ package model;
 import java.time.LocalDate;
 
 public class Pet {
-    private int idPet;
-    private String nome;
-    private String porte;
-    private String especie;
-    private LocalDate data_nascimento;
-    private int idUsuario;
+    private int petId;
+    private String name;
+    private String size;
+    private String specie;
+    private LocalDate birthDate;
+    private int userId;
 
-    public Pet (String nome, String porte, String especie, LocalDate data_nascimento, int idUsuario) {
-        this.nome = nome;
-        this.porte = porte;
-        this.especie = especie;
-        this.data_nascimento = data_nascimento;
-        this.idUsuario = idUsuario;
+    public Pet (String name, String size, String specie, LocalDate birthDate, int userId) {
+        this.name = name;
+        this.size = size;
+        this.specie = specie;
+        this.birthDate = birthDate;
+        this.userId = userId;
     }
 
-    public Pet(int idPet, String nome, String porte, String especie, LocalDate data_nascimento, int idUsuario) {
-        this(nome, porte, especie, data_nascimento, idUsuario);
-        this.idPet = idPet;
+    public Pet(int petId, String name, String size, String specie, LocalDate data_nascimento, int userId) {
+        this(name, size, specie, data_nascimento, userId);
+        this.petId = petId;
     }
 
-    public int getIdPet() {
-        return idPet;
+    public int getPetId() {
+        return petId;
     }
 
-    public void setIdPet(int idPet) {
-        this.idPet = idPet;
+    public void setPetId(int petId) {
+        this.petId = petId;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPorte() {
-        return porte;
+    public String getSize() {
+        return size;
     }
 
-    public void setPorte(String porte) {
-        this.porte = porte;
+    public void setSize(String size) {
+        this.size = size;
     }
 
-    public String getEspecie() {
-        return especie;
+    public String getSpecie() {
+        return specie;
     }
 
-    public void setEspecie(String especie) {
-        this.especie = especie;
+    public void setSpecie(String specie) {
+        this.specie = specie;
     }
 
-    public LocalDate getData_nascimento() {
-        return data_nascimento;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setData_nascimento(LocalDate data_nascimento) {
-        this.data_nascimento = data_nascimento;
+    public void setBirthDate(LocalDate data_nascimento) {
+        this.birthDate = birthDate;
     }
 
     public int getIdUsuario() {
-        return idUsuario;
+        return userId;
     }
 
     public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+        this.userId = idUsuario;
     }
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "idPet=" + idPet +
-                ", nome='" + nome + '\'' +
-                ", porte='" + porte + '\'' +
-                ", especie='" + especie + '\'' +
-                ", data_nascimento=" + data_nascimento +
-                ", idUsuario=" + idUsuario +
-                '}';
-    }
+
 }

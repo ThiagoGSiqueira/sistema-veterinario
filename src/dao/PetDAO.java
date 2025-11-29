@@ -1,8 +1,6 @@
 package dao;
 
-import com.mysql.cj.jdbc.result.UpdatableResultSet;
 import model.Pet;
-import model.Usuario;
 import util.DatabaseConnection;
 
 import java.sql.Connection;
@@ -13,68 +11,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PetDAO {
-    //Adicionar pet
-    //Remover pet
-    //Listar TODOS os pets
-    //Listar pet por dono
-    //Atualizar pet
-
-    public int criarPet(Pet pet) throws SQLException {
-        String sql = "INSERT INTO pet (nome, porte, especie, data_nascimento, id_usuario) VALUES (?, ?, ?, ?, ?)";
-        int linhasAfetadas = 0;
+    public int save(Pet pet) throws SQLException {
+        String sql = "INSERT INTO pet (name, size, species, birth_date, user_id) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, pet.getNome());
-            ps.setString(2, pet.getPorte());
-            ps.setString(3, pet.getEspecie());
-            ps.setDate(4, java.sql.Date.valueOf(pet.getData_nascimento()));
+            ps.setString(1, pet.getName());
+            ps.setString(2, pet.getSize());
+            ps.setString(3, pet.getSpecie());
+            ps.setDate(4, java.sql.Date.valueOf(pet.getBirthDate()));
             ps.setInt(5, pet.getIdUsuario());
-            linhasAfetadas = ps.executeUpdate();
+            return ps.executeUpdate();
 
-            return linhasAfetadas;
         }
     }
 
-    public int removerPet(int idPet) throws SQLException {
-        String sql = "DELETE FROM pet WHERE id_pet = ?";
-        int linhasAfetadas = 0;
+    public int deleteById(int petId) throws SQLException {
+        String sql = "DELETE FROM pet WHERE pet_id = ?";
+
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idPet);
-            linhasAfetadas = ps.executeUpdate();
-            return linhasAfetadas;
+            ps.setInt(1, petId);
+            return ps.executeUpdate();
         }
     }
 
-    public List<Pet> buscarPetsPorDono(int idUsuario) throws SQLException {
+    public List<Pet> findByUserId(int userId) throws SQLException {
 
         List<Pet> pets = new ArrayList<>();
 
-        String sql = "SELECT * FROM pet WHERE id_usuario = ?";
+        String sql = "SELECT * FROM pet WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConexao();
         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idUsuario);
+            ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Pet p = new Pet(
-                        rs.getInt("id_pet"),
-                        rs.getString("nome"),
-                        rs.getString("porte"),
-                        rs.getString("especie"),
-                        rs.getDate("data_nascimento").toLocalDate(),
-                        rs.getInt("id_usuario")
+                Pet pet = new Pet(
+                        rs.getInt("pet_id"),
+                        rs.getString("name"),
+                        rs.getString("size"),
+                        rs.getString("species"),
+                        rs.getDate("birth_date").toLocalDate(),
+                        rs.getInt("user_id")
                 );
-                pets.add(p);
+                pets.add(pet);
             }
             return pets;
         }
     }
 
-    public List<Pet> buscarPets() throws SQLException {
+    public List<Pet> findAll() throws SQLException {
         String sql = "SELECT * FROM pet";
         List<Pet> pets = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConexao();
@@ -84,29 +73,16 @@ public class PetDAO {
 
            while (rs.next()) {
                Pet pet = new Pet(
-                       rs.getInt("id_pet"),
-                       rs.getString("nome"),
-                       rs.getString("porte"),
-                       rs.getString("especie"),
-                       rs.getDate("data_nascimento").toLocalDate(),
-                       rs.getInt("id_usuario")
+                       rs.getInt("pet_id"),
+                       rs.getString("name"),
+                       rs.getString("size"),
+                       rs.getString("species"),
+                       rs.getDate("birth_date").toLocalDate(),
+                       rs.getInt("user_id")
                );
+               pets.add(pet);
            }
             return pets;
-        }
-    }
-
-    public int atualizarPet(int idPet, Pet pet) throws SQLException {
-        String sql = "UPDATE pet SET nome=? WHERE id_pet = ?";
-        int linhasAfetadas = 0;
-
-        try (Connection conn = DatabaseConnection.getConexao();
-        PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, pet.getNome());
-            ps.setInt(2, idPet);
-
-            linhasAfetadas = ps.executeUpdate();
-            return linhasAfetadas;
         }
     }
 }
